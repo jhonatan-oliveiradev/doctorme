@@ -4,6 +4,12 @@ import helmet from "helmet";
 import cors from "cors";
 import DoctorController from "@/infra/controller/DoctorController";
 import PatientController from "@/infra/controller/PatientController";
+import {
+	authenticationSchema,
+	createAppointmentAgendaIdSchema,
+	createPatientPatientIdSchema
+} from "@/infra/ValidationSchemas";
+import { validateBody, validateParams } from "@/infra/ValidationMiddleware";
 
 export default class Router {
 	app: express.Express;
@@ -26,10 +32,17 @@ export default class Router {
 			res.send("Hello World");
 		});
 
+		this.app.post(
+			"/authenticate",
+			validateBody(authenticationSchema),
+			this.patientController.authenticate
+		);
 		this.app.get("/doctors", this.doctorController.listDoctor);
 		this.app.post("/patient", this.patientController.createPatient);
 		this.app.post(
 			"/patient/:patientId/appointment",
+			validateParams(createPatientPatientIdSchema),
+			validateBody(createAppointmentAgendaIdSchema),
 			this.patientController.createAppointment
 		);
 	}
