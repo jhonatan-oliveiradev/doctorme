@@ -20,8 +20,8 @@ model Patient {
   id          Int           @id @default(autoincrement())
   userId      Int           @unique
   name        String
-  phone       String
-  User        User          @relation(fields: [userId], references: [id])
+  phone       String        @unique
+  user        User          @relation(fields: [userId], references: [id])
   appointment Appointment[]
   createdAt   DateTime      @default(now())
 }
@@ -40,7 +40,7 @@ model Doctor {
   experience   String
   attendances  Int
   address      String
-  Agenda       Agenda[]
+  agenda       Agenda[]
   appointment  Appointment[]
   createdAt    DateTime      @default(now())
 }
@@ -49,7 +49,7 @@ model Agenda {
   id        Int      @id @default(autoincrement())
   doctorId  Int
   date      DateTime
-  Doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
   available Boolean  @default(true)
   createdAt DateTime @default(now())
 }
