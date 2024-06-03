@@ -7,9 +7,12 @@ import PatientController from "@/infra/controller/PatientController";
 import {
 	authenticationSchema,
 	createAppointmentAgendaIdSchema,
-	createPatientPatientIdSchema
+	createPatientPatientIdSchema,
+	getDoctorByIdSchema,
+	getPatientByPhoneSchema
 } from "@/infra/ValidationSchemas";
 import { validateBody, validateParams } from "@/infra/ValidationMiddleware";
+import { errorHandling } from "./helpers/ErrorHandling";
 
 export default class Router {
 	app: express.Express;
@@ -22,6 +25,7 @@ export default class Router {
 		this.app.use(cors());
 		this.app.use(helmet());
 		this.app.use(express.json());
+		this.app.use(errorHandling);
 
 		this.setRoutes();
 	}
@@ -38,7 +42,17 @@ export default class Router {
 			this.patientController.authenticate
 		);
 		this.app.get("/doctors", this.doctorController.listDoctor);
+		this.app.get(
+			"/doctor/:id",
+			validateParams(getDoctorByIdSchema),
+			this.doctorController.getDoctorById
+		);
 		this.app.post("/patient", this.patientController.createPatient);
+		this.app.get(
+			"/patient/:phone",
+			validateParams(getPatientByPhoneSchema),
+			this.patientController.getPatientByPhone
+		);
 		this.app.post(
 			"/patient/:patientId/appointment",
 			validateParams(createPatientPatientIdSchema),

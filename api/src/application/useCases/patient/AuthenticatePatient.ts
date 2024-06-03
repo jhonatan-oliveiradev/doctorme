@@ -1,4 +1,5 @@
 import DatabaseService from "@/infra/DatabaseService";
+import { BusinessError, NotFoundError } from "@/infra/helpers/Errors";
 import {
 	comparePassword,
 	encodeToBase64
@@ -11,13 +12,13 @@ export default class AuthenticatePatientUseCase {
 		const user = await this.database.getUserByPhone(phone);
 
 		if (!user) {
-			throw new Error("Patient not found");
+			throw new NotFoundError("Patient not found");
 		}
 
 		const isPasswordValid = comparePassword(password, user.password);
 
 		if (!isPasswordValid) {
-			throw new Error("Invalid password");
+			throw new BusinessError("Phone or password is invalid");
 		}
 
 		const payload = {
