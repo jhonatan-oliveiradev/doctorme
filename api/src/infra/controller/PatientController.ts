@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { database } from "../DatabaseService";
+import { database } from "@/infra/DatabaseService";
 import PatientController from "@/application/controller/PatientController";
 import CreatePatientUseCase from "@/application/useCases/patient/CreatePatient";
+import CreateAppointmentUseCase from "@/application/useCases/patient/CreateAppointment";
 
 export default class PatientControllerImpl implements PatientController {
 	async createPatient(req: Request, res: Response) {
@@ -12,7 +13,15 @@ export default class PatientControllerImpl implements PatientController {
 		res.status(201).json(patient);
 	}
 
-	createAppointment(req: Request, res: Response): Promise<void> {
-		throw new Error("Method not implemented.");
+	async createAppointment(req: Request, res: Response) {
+		const { agendaId } = req.body;
+		const patientId = req.params;
+		const useCase = new CreateAppointmentUseCase(database);
+		const appointment = await useCase.execute(
+			Number(patientId),
+			Number(agendaId)
+		);
+
+		res.status(201).json(appointment);
 	}
 }
