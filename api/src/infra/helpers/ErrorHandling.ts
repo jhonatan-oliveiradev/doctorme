@@ -19,7 +19,7 @@ export const errorHandling = (
 	return res.status(statusCode).json(responseErrorFormatter(error));
 };
 
-function responseErrorFormatter(error: Error) {
+export function responseErrorFormatter(error: Error) {
 	return {
 		name: error.name,
 		message: error.message

@@ -11,7 +11,11 @@ import {
 	getDoctorByIdSchema,
 	getPatientByPhoneSchema
 } from "@/infra/ValidationSchemas";
-import { validateBody, validateParams } from "@/infra/ValidationMiddleware";
+import {
+	validateBody,
+	validateParams,
+	isAuthenticated
+} from "@/infra/ValidationMiddleware";
 import { errorHandling } from "./helpers/ErrorHandling";
 
 export default class Router {
@@ -50,11 +54,13 @@ export default class Router {
 		this.app.post("/patient", this.patientController.createPatient);
 		this.app.get(
 			"/patient/:phone",
+			isAuthenticated,
 			validateParams(getPatientByPhoneSchema),
 			this.patientController.getPatientByPhone
 		);
 		this.app.post(
 			"/patient/:patientId/appointment",
+			isAuthenticated,
 			validateParams(createPatientPatientIdSchema),
 			validateBody(createAppointmentAgendaIdSchema),
 			this.patientController.createAppointment
