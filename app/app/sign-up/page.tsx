@@ -3,15 +3,26 @@ import { Field } from "@/components/form";
 import { Header } from "@/components/header";
 import Link from "next/link";
 
-export default function SignIn() {
+export default function SignUp() {
   return (
     <>
-      <Header href="/" title="Login" iconClassName="w-4 h-4" />
+      <Header href="/" title="Crie conta" iconClassName="w-4 h-4" />
       <div className="py-4">
-        <h1 className="text-xl font-bold">Acesse sua conta</h1>
-        <p className="text-sm">Olá, informe seus dados para acessar.</p>
+        <h1 className="text-xl font-bold">Criar conta</h1>
+        <p className="text-sm">
+          Por favor, informe seu nome e uma senha para criar sua conta.
+        </p>
       </div>
       <div className="flex flex-col gap-4">
+        <Field
+          labelProps={{ children: "Nome" }}
+          inputProps={{
+            placeholder: "Informe seu nome",
+            type: "text",
+            defaultValue: "",
+            autoFocus: true,
+          }}
+        />
         <Field
           labelProps={{ children: "Telefone" }}
           inputProps={{
@@ -30,7 +41,7 @@ export default function SignIn() {
           }}
         />
 
-        <Button>Login</Button>
+        <Button>Criar conta</Button>
       </div>
       <div className="mt-8 flex flex-col items-center justify-center">
         <div className="relative mb-4 flex h-5 w-full items-center justify-center">
@@ -38,12 +49,12 @@ export default function SignIn() {
           <div className="absolute w-full border-b border-b-zinc-100"></div>
         </div>
         <p className="text-sm">
-          Não está cadastrado?{" "}
+          Já está cadastrado?{" "}
           <Link
-            href="/sign-up"
+            href="/sign-in"
             className="font-semibold text-green-600 underline"
           >
-            Crie sua conta
+            Acesse sua conta
           </Link>
         </p>
       </div>
